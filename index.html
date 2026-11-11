@@ -1,0 +1,595 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ось — студия пилатеса. Запись на занятия</title>
+<meta name="description" content="Студия пилатеса «Ось»: реформер, мат, растяжка и занятия для здоровой спины. Группы до 6 человек. Запись онлайн.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600&family=Unbounded:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0e1f17;--cream:#f4f1e6;--lime:#cdfb4b;--lilac:#c7b5ff;--coral:#ff6a3d;--pink:#ffc2dd;
+  --line:#0e1f1722;--muted:#0e1f17a6;
+  --disp:"Unbounded",system-ui,sans-serif;--sans:"Onest",system-ui,sans-serif;
+  --ease:cubic-bezier(.2,.7,.2,1);
+}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth;overflow-x:clip;scroll-padding-top:90px}
+body{background:var(--cream);color:var(--ink);font:400 16px/1.55 var(--sans);-webkit-font-smoothing:antialiased;overflow-x:clip}
+img{display:block;width:100%;height:100%;object-fit:cover;background:var(--lilac)}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+:focus-visible{outline:3px solid var(--coral);outline-offset:3px}
+.wrap{width:min(1240px,100% - 48px);margin-inline:auto}
+h1,h2,h3{font-family:var(--disp);font-weight:700;line-height:1.04;letter-spacing:-.03em}
+h2{font-size:clamp(28px,4.8vw,68px)}
+h2 em,.mark{font-style:normal;display:inline-block;padding:.02em .22em .08em;border-radius:.28em;background:var(--lime);color:var(--ink);rotate:-2deg}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:99px;box-shadow:inset 0 0 0 1.5px currentColor;font:500 12px var(--disp);letter-spacing:.04em;text-transform:uppercase}
+.eyebrow::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--coral)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:17px 28px;border-radius:99px;background:var(--ink);color:var(--cream);font:500 14px var(--disp);transition:background .3s,color .3s,scale .3s var(--ease)}
+.btn::after{content:"→";transition:translate .3s var(--ease)}
+.btn:hover{background:var(--lime);color:var(--ink);scale:1.04}
+.btn:hover::after{translate:5px}
+.btn.lime{background:var(--lime);color:var(--ink)}
+.btn.lime:hover{background:var(--cream)}
+.btn.line{background:none;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--ink)}
+.btn.line:hover{background:var(--ink);color:var(--cream)}
+.btn.plain::after{content:none}
+.sec{padding:clamp(80px,10vw,150px) 0}
+.head{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:end;margin-bottom:clamp(32px,5vw,64px)}
+.head h2{margin-top:22px}
+.head p{max-width:340px;color:var(--muted)}
+
+/* появление при прокрутке */
+.rv{opacity:0;transform:translateY(46px) rotate(1.5deg);transition:opacity .9s var(--ease) var(--d,0s),transform .9s var(--ease) var(--d,0s)}
+.rv.in{opacity:1;transform:none}
+
+#bar{position:fixed;inset:0 0 auto;height:4px;z-index:40;background:var(--coral);scale:0 1;transform-origin:left}
+
+/* ---------- шапка-капсула ---------- */
+header{position:fixed;top:14px;left:50%;translate:-50%;z-index:30;width:min(1240px,100% - 24px);display:flex;align-items:center;justify-content:space-between;gap:20px;padding:8px 8px 8px 24px;border-radius:99px;background:#f4f1e6c7;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:0 10px 30px #0e1f1714}
+.logo{font:700 20px var(--disp);letter-spacing:-.03em;display:flex;align-items:center;gap:8px}
+.logo::before{content:"";width:14px;height:14px;border-radius:50%;background:var(--coral);animation:pulse 4s ease-in-out infinite}
+@keyframes pulse{50%{scale:.55}}
+header nav{display:flex;gap:30px;font-size:14px;font-weight:500}
+header nav a{transition:opacity .3s}
+header nav:hover a:not(:hover){opacity:.4}
+header .btn{padding:12px 20px;font-size:12px}
+
+/* ---------- первый экран: живой фон на WebGL ---------- */
+.hero{position:relative;min-height:100svh;padding:104px 0 56px;display:flex;align-items:center;border-radius:0 0 44px 44px;overflow:hidden;background:linear-gradient(120deg,var(--lilac),var(--cream) 45%,var(--lime))}
+#gl{position:absolute;inset:0;width:100%;height:100%}
+.hero .wrap{position:relative}
+h1{font-size:clamp(32px,min(8vw,14svh),128px);text-transform:uppercase;line-height:.98;position:relative;z-index:2}
+h1 .ln{display:block;overflow:hidden;padding-top:.14em;margin-top:-.14em;white-space:nowrap}
+.ch{display:inline-block;white-space:pre;transform:translateY(115%) rotate(9deg);animation:chUp .9s var(--ease) forwards;animation-delay:calc(var(--k) * 38ms + .1s)}
+@keyframes chUp{to{transform:none}}
+h1 .pill{display:inline-block;width:0;height:.76em;margin-right:.14em;border-radius:99px;overflow:hidden;vertical-align:-.04em;animation:pillIn 1s var(--ease) .7s forwards}
+@keyframes pillIn{to{width:1.9em}}
+h1 .out{color:transparent;-webkit-text-stroke:.022em var(--ink)}
+@keyframes fade{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+.hero .eyebrow,.lead,.cta,.breath,.card3d{animation:fade 1s var(--ease) both}
+.hero .eyebrow{margin-bottom:26px}
+.lead{max-width:430px;margin:34px 0 30px;font-size:18px;font-weight:500;animation-delay:.9s}
+.cta{display:flex;flex-wrap:wrap;gap:12px;animation-delay:1s}
+.breath{display:flex;align-items:center;gap:14px;margin-top:38px;font-size:13px;font-weight:500;animation-delay:1.15s}
+.breath .o{position:relative;width:44px;height:44px;flex:none;border-radius:50%;box-shadow:inset 0 0 0 1.5px var(--ink)}
+.breath .o::after{content:"";position:absolute;inset:0;border-radius:50%;background:var(--ink);animation:breathe 8s ease-in-out infinite}
+@keyframes breathe{0%,100%{scale:.25}50%{scale:1}}
+.breath .w{position:relative;display:inline-block;width:5.4em;font-family:var(--disp);font-size:12px}
+.breath .w b{font-weight:500;animation:word 8s steps(1) infinite}
+.breath .w b+b{position:absolute;left:0;animation-delay:-4s}
+@keyframes word{0%{opacity:1}50%,100%{opacity:0}}
+/* карточка с фото наклоняется за мышью */
+.card3d{position:absolute;right:0;bottom:-10px;width:min(27vw,350px);aspect-ratio:3/4;perspective:900px;animation-delay:.8s;z-index:1}
+.tilt{transform:rotateX(calc(var(--ry,0) * 1deg)) rotateY(calc(var(--rx,0) * 1deg));transition:transform .5s var(--ease);transform-style:preserve-3d}
+.card3d .tilt{position:absolute;inset:0;rotate:5deg}
+.card3d .ph{position:absolute;inset:0;border-radius:30px;overflow:hidden;box-shadow:0 40px 70px #0e1f1740}
+.badge{position:absolute;left:-52px;bottom:54px;width:128px;height:128px;border-radius:50%;background:var(--lime);display:grid;place-items:center;transform:translateZ(60px);box-shadow:0 14px 30px #0e1f1733}
+.badge svg{position:absolute;inset:6px;animation:spin 20s linear infinite}
+.badge text{font:500 9.6px var(--disp);letter-spacing:.12em;fill:currentColor;text-transform:uppercase}
+.badge b{font:700 22px var(--disp)}
+@keyframes spin{to{rotate:360deg}}
+.chip{position:absolute;right:-16px;top:12%;padding:10px 16px;border-radius:99px;background:var(--ink);color:var(--cream);font:500 12px var(--disp);transform:translateZ(40px);animation:bob 5s ease-in-out infinite}
+.chip+.chip{right:auto;left:-30px;top:44%;background:var(--coral);color:var(--ink);animation-delay:-2.5s}
+@keyframes bob{50%{translate:0 -12px}}
+
+/* ---------- две перекрещенные ленты ---------- */
+.ribbons{position:relative;height:170px;margin-top:-34px;z-index:3;pointer-events:none}
+.rib{position:absolute;left:-5vw;width:110vw;top:40px;padding:14px 0;overflow:hidden;white-space:nowrap;background:var(--ink);color:var(--cream);rotate:-3deg}
+.rib+.rib{background:var(--lime);color:var(--ink);rotate:2.5deg;top:62px}
+.rib div{display:inline-flex;gap:34px;padding-right:34px;font:700 clamp(18px,2.4vw,30px) var(--disp);text-transform:uppercase;animation:run 30s linear infinite}
+.rib+.rib div{animation-direction:reverse}
+.rib span::after{content:"✦";margin-left:34px;color:var(--coral)}
+@keyframes run{to{transform:translateX(-50%)}}
+
+/* ---------- направления: вертикальная прокрутка двигает карточки вбок ---------- */
+.hs{position:relative}
+.hs .pin{position:sticky;top:0;height:100svh;display:flex;align-items:center;overflow:clip}
+.track{display:flex;align-items:center;gap:24px;padding:60px max(24px,calc((100vw - 1240px) / 2)) 0;will-change:transform}
+.intro{flex:none;width:min(80vw,500px)}
+.intro h2{margin:22px 0 20px;font-size:clamp(24px,3.4vw,46px)}
+.intro p{color:var(--muted);max-width:360px}
+.intro .hint{display:inline-block;margin-top:26px;font:500 13px var(--disp);animation:nudge 1.6s ease-in-out infinite}
+@keyframes nudge{50%{translate:10px}}
+.dcard{flex:none;display:flex;flex-direction:column;width:min(78vw,430px);height:min(66svh,580px);padding:16px 16px 22px;border-radius:34px;background:var(--c);rotate:var(--r);transition:rotate .5s var(--ease),scale .5s var(--ease)}
+.dcard:hover{rotate:0deg;scale:1.03}
+.dcard .ph{flex:1;min-height:0;border-radius:22px;overflow:hidden}
+.dcard img{transition:scale 1.2s var(--ease)}
+.dcard:hover img{scale:1.08}
+.dcard .n{font:500 12px var(--disp);margin:18px 6px 6px;opacity:.7}
+.dcard h3{font-size:clamp(22px,2.5vw,32px);margin:0 6px 10px}
+.dcard p{margin:0 6px 14px;font-size:15px}
+.dcard .m{display:flex;flex-wrap:wrap;gap:6px;margin:auto 6px 0}
+.dcard .m span{padding:5px 12px;border-radius:99px;box-shadow:inset 0 0 0 1.5px var(--ink);font:500 11px var(--disp)}
+.go{flex:none;display:grid;place-items:center;text-align:center;width:min(60vw,300px);aspect-ratio:1;border-radius:50%;background:var(--ink);color:var(--cream);font:700 clamp(16px,1.8vw,22px)/1.2 var(--disp);transition:background .3s,color .3s,scale .4s var(--ease)}
+.go:hover{background:var(--coral);color:var(--ink);scale:1.06}
+
+/* ---------- студия: фото раскрывается на весь экран ---------- */
+.zoom{position:relative;height:230vh}
+.zoom .pin{position:sticky;top:0;height:100svh;overflow:clip;display:grid;place-items:center;color:var(--cream)}
+.zoom .cap{position:absolute;top:96px;left:50%;translate:-50%;color:var(--ink);opacity:calc(1 - var(--z,0) * 3)}
+.zoom .ph{position:absolute;inset:0;clip-path:inset(calc((1 - var(--z,0)) * 20%) calc((1 - var(--z,0)) * 26%) round calc((1 - var(--z,0)) * 60px))}
+.zoom img{scale:calc(1.25 - var(--z,0) * .25)}
+.zoom .ph::after{content:"";position:absolute;inset:0;background:#0e1f17;opacity:calc(var(--z,0) * .55)}
+.zoom .txt{position:relative;width:min(1240px,100% - 48px);opacity:calc((var(--z,0) - .55) * 2.6);translate:0 calc((1 - var(--z,0)) * 60px)}
+.zoom h2{max-width:14ch;margin-bottom:44px;font-size:clamp(30px,5.6vw,84px)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;border-top:1.5px solid #f4f1e666;padding-top:24px}
+.stats b{display:block;font:700 clamp(30px,4vw,58px)/1 var(--disp);color:var(--lime)}
+.stats span{font-size:14px}
+
+/* ---------- расписание и запись ---------- */
+.sched{background:var(--ink);color:var(--cream);border-radius:44px 44px 0 0}
+.sched .head p{color:#f4f1e6a6}
+.days{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-bottom:20px}
+.day{padding:14px 6px;border-radius:20px;box-shadow:inset 0 0 0 1.5px #f4f1e633;text-align:center;font:500 11px var(--disp);text-transform:uppercase;color:#f4f1e6a6;transition:background .3s,color .3s,translate .3s var(--ease)}
+.day b{display:block;margin-top:4px;font:700 26px/1.1 var(--disp);color:var(--cream)}
+.day:hover{translate:0 -4px;background:#f4f1e614}
+.day[aria-pressed=true]{background:var(--lime);color:var(--ink);box-shadow:none}
+.day[aria-pressed=true] b{color:var(--ink)}
+.kinds{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.kind{padding:10px 18px;border-radius:99px;box-shadow:inset 0 0 0 1.5px #f4f1e633;font-size:14px;font-weight:500;transition:background .3s,color .3s}
+.kind:hover{background:#f4f1e614}
+.kind[aria-pressed=true]{background:var(--lilac);color:var(--ink);box-shadow:none}
+.slot{display:grid;grid-template-columns:130px 1.4fr 1fr 170px;gap:20px;align-items:center;padding:20px 22px;margin-bottom:8px;border-radius:24px;background:#f4f1e60d;transition:background .35s,color .35s,translate .35s var(--ease);animation:fade .6s var(--ease) both;animation-delay:calc(var(--i) * 70ms)}
+.slot:hover{background:var(--cream);color:var(--ink);translate:8px}
+.slot time{font:700 30px/1 var(--disp)}
+.slot h3{font-size:20px}
+.slot small{display:block;margin-top:6px;font:400 13px var(--sans);letter-spacing:0;opacity:.65}
+.left{font-size:13px;opacity:.85}
+.left i{display:block;height:5px;border-radius:5px;background:color-mix(in srgb,currentColor 18%,transparent);margin-top:8px;overflow:hidden}
+.left i::after{content:"";display:block;height:100%;width:var(--fill);background:var(--coral);border-radius:5px}
+.slot .btn{padding:14px 18px;font-size:12px;background:var(--lime);color:var(--ink)}
+.slot:hover .btn{background:var(--ink);color:var(--cream)}
+.slot .btn:hover{background:var(--coral);color:var(--ink)}
+.slot .btn:disabled{background:none;color:inherit;opacity:.4;box-shadow:inset 0 0 0 1.5px currentColor;cursor:default;scale:1}
+.slot .btn:disabled::after,.slot.mine .btn::after{content:none}
+.slot.mine{background:var(--lime);color:var(--ink)}
+.slot.mine .btn{background:var(--ink);color:var(--cream)}
+.empty{padding:44px 22px;border-radius:24px;background:#f4f1e60d;color:#f4f1e6a6}
+.note{margin-top:20px;font-size:13px;color:#f4f1e680}
+
+/* ---------- цены ---------- */
+.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;perspective:1400px}
+.plan{position:relative;display:flex;flex-direction:column;gap:12px;padding:30px;border-radius:34px;background:var(--c);min-height:440px}
+.plan.hot{background:var(--ink);color:var(--cream)}
+.plan .tag{position:absolute;right:22px;top:-14px;padding:7px 14px;border-radius:99px;background:var(--coral);color:var(--ink);font:500 11px var(--disp);rotate:4deg}
+.plan h3{font-size:22px}
+.plan .sum{font:700 clamp(34px,3.6vw,50px)/1 var(--disp);margin-top:10px}
+.plan.hot .sum{color:var(--lime)}
+.plan .per{font-size:14px;opacity:.7;min-height:1.5em}
+.plan ul{list-style:none;padding:0;margin:10px 0 22px;font-size:15px}
+.plan li{padding:11px 0;border-top:1.5px solid color-mix(in srgb,currentColor 18%,transparent)}
+.plan li::before{content:"✦";margin-right:10px;color:var(--coral)}
+.plan .btn{margin-top:auto}
+.plan.hot .btn{background:var(--lime);color:var(--ink)}
+.plan.hot .btn:hover{background:var(--cream)}
+
+/* ---------- вопросы ---------- */
+.faq{display:grid;grid-template-columns:.8fr 1.2fr;gap:5vw}
+.faq h2{margin-top:22px}
+details{margin-bottom:10px;border-radius:26px;background:#fff;transition:background .3s}
+details[open]{background:var(--lilac)}
+summary{display:flex;justify-content:space-between;gap:20px;align-items:center;padding:22px 24px;font:500 clamp(15px,1.5vw,19px)/1.3 var(--disp);cursor:pointer;list-style:none}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";flex:none;display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:var(--ink);color:var(--cream);font:400 22px/1 var(--sans);transition:rotate .4s var(--ease)}
+details[open] summary::after{rotate:45deg}
+details p{padding:0 70px 24px 24px;max-width:640px}
+
+/* ---------- подвал ---------- */
+footer{background:var(--ink);color:var(--cream);border-radius:44px 44px 0 0;padding:clamp(60px,8vw,110px) 0 26px;overflow:hidden}
+.fin{display:grid;grid-template-columns:1.2fr .8fr;gap:5vw;align-items:end}
+.fin p{margin:24px 0 30px;max-width:420px;color:#f4f1e6a6}
+.fin dl{display:grid;gap:18px;font-size:15px}
+.fin dt{font:500 11px var(--disp);text-transform:uppercase;color:var(--lime);margin-bottom:4px}
+.giant{display:flex;justify-content:center;font:700 clamp(110px,31vw,480px)/.8 var(--disp);letter-spacing:-.06em;margin:clamp(40px,6vw,80px) 0 .06em;color:var(--lime);user-select:none}
+.giant span{transition:translate .5s var(--ease),color .3s}
+.giant span:hover{translate:0 -6%;color:var(--coral)}
+.legal{display:flex;flex-wrap:wrap;gap:8px 28px;justify-content:space-between;font-size:12px;color:#f4f1e680;border-top:1.5px solid #f4f1e622;padding-top:18px}
+.legal a{text-decoration:underline}
+
+/* ---------- окно записи ---------- */
+dialog{width:min(470px,100% - 24px);margin:auto;padding:34px;border:0;border-radius:34px;background:var(--cream);color:var(--ink)}
+dialog[open]{animation:pop .55s var(--ease)}
+dialog::backdrop{background:#0e1f17b3;backdrop-filter:blur(8px);animation:dim .4s}
+@keyframes pop{from{opacity:0;transform:translateY(40px) scale(.9) rotate(-3deg)}}
+@keyframes dim{from{opacity:0}}
+dialog .x{position:absolute;right:18px;top:18px;width:40px;height:40px;border-radius:50%;font-size:22px;line-height:1;background:var(--ink);color:var(--cream)}
+dialog h3{font-size:28px;margin:18px 0 8px}
+dialog .when{color:var(--muted);margin-bottom:24px}
+label{display:block;font:500 11px var(--disp);text-transform:uppercase;margin-bottom:16px}
+input{display:block;width:100%;margin-top:8px;padding:15px 18px;border:1.5px solid var(--line);border-radius:18px;background:#fff;font:400 16px var(--sans);color:var(--ink);transition:border-color .3s}
+input:focus{outline:0;border-color:var(--ink)}
+dialog .btn{width:100%;margin-top:6px}
+dialog .fine{margin-top:14px;font-size:12px;color:var(--muted);text-align:center}
+.ok{text-align:center}
+.ok svg{width:96px;height:96px;margin:4px auto 0;background:var(--lime);border-radius:50%;animation:pop .6s var(--ease)}
+.ok path{fill:none;stroke:var(--ink);stroke-width:5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:60;stroke-dashoffset:60;animation:draw .5s var(--ease) .35s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+
+@media(max-width:860px){
+  .wrap{width:calc(100% - 36px)}
+  header nav{display:none}
+  header{padding-left:18px}
+  .hero{padding:110px 0 60px;min-height:0}
+  h1{font-size:clamp(32px,10.4vw,80px)}
+  .lead{font-size:16px;margin:26px 0 24px}
+  .card3d{position:relative;right:auto;bottom:auto;width:64%;margin:44px auto 0}
+  .badge{left:-44px;width:104px;height:104px;bottom:30px}
+  .badge b{font-size:17px}
+  .badge text{font-size:11.5px}
+  .chip{right:-34px}
+  .chip+.chip{left:-40px}
+  .ribbons{height:150px}
+  .head,.faq,.fin{grid-template-columns:1fr}
+  .track{gap:16px;padding-inline:18px}
+  .dcard{height:min(68svh,540px);border-radius:28px}
+  .zoom{height:200vh}
+  .zoom .ph{clip-path:inset(calc((1 - var(--z,0)) * 26%) calc((1 - var(--z,0)) * 12%) round calc((1 - var(--z,0)) * 40px))}
+  .zoom .txt{width:calc(100% - 36px)}
+  .stats{grid-template-columns:1fr 1fr}
+  .days{grid-template-columns:repeat(7,80px);overflow-x:auto;margin-inline:-18px;padding:6px 18px;scrollbar-width:none}
+  .slot{grid-template-columns:auto 1fr;gap:12px 16px;padding:18px}
+  .slot:hover{translate:0}
+  .slot time{font-size:24px}
+  .slot .left,.slot .btn{grid-column:1/-1}
+  .plans{grid-template-columns:1fr}
+  .plan{min-height:0}
+  details p{padding-right:24px}
+  dialog{padding:28px 22px}
+}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01s!important;animation-delay:0s!important;animation-iteration-count:1!important;transition:none!important;scroll-behavior:auto!important}.rv{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<div id="bar"></div>
+
+<header>
+  <a class="logo" href="#" aria-label="Ось — на главную">Ось</a>
+  <nav aria-label="Основная навигация">
+    <a href="#dirs">Направления</a><a href="#studio">Студия</a><a href="#schedule">Расписание</a><a href="#prices">Цены</a>
+  </nav>
+  <a class="btn" href="#schedule">Записаться</a>
+</header>
+
+<main>
+<section class="hero" id="hero">
+  <canvas id="gl" aria-hidden="true"></canvas>
+  <div class="wrap">
+    <p class="eyebrow">Студия пилатеса · Москва</p>
+    <h1 aria-label="Сильный центр, лёгкое тело">
+      <span class="ln" aria-hidden="true">Сильный</span>
+      <span class="ln" aria-hidden="true"><span class="pill"><img src="https://images.unsplash.com/photo-1747239202356-764770773c9a?w=500&q=80&auto=format&fit=crop" alt=""></span>центр</span>
+      <span class="ln" aria-hidden="true">лёгкое <span class="out">тело</span></span>
+    </h1>
+    <p class="lead">Реформер и мат в группах до шести человек. Тренер видит каждого и подбирает нагрузку под вашу спину.</p>
+    <div class="cta">
+      <a class="btn" href="#schedule">Выбрать занятие</a>
+      <a class="btn line plain" href="#dirs">Направления</a>
+    </div>
+    <div class="breath" aria-hidden="true"><span class="o"></span><span>Подышите с нами: <span class="w"><b>вдох…</b><b>выдох…</b></span></span></div>
+    <div class="card3d">
+      <div class="tilt" data-tilt>
+        <div class="ph"><img src="https://images.unsplash.com/photo-1747238415033-b74eec07eb59?w=800&q=80&auto=format&fit=crop" alt="Девушка выполняет упражнение на реформере в светлой студии" fetchpriority="high"></div>
+        <a class="badge" href="#schedule" aria-label="Первое занятие за 900 рублей — записаться">
+          <svg viewBox="0 0 120 120" aria-hidden="true"><path id="ring" d="M60 60m-50 0a50 50 0 1 1 100 0a50 50 0 1 1-100 0" fill="none"/><text><textPath href="#ring">первое занятие ✦ первое занятие ✦</textPath></text></svg>
+          <b>900 ₽</b>
+        </a>
+        <span class="chip">до 6 человек</span><span class="chip">55 минут</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="ribbons" aria-hidden="true">
+  <div class="rib"><div><span>Реформер</span><span>Мат</span><span>Растяжка</span><span>Здоровая спина</span><span>Осанка</span><span>Дыхание</span><span>Реформер</span><span>Мат</span><span>Растяжка</span><span>Здоровая спина</span><span>Осанка</span><span>Дыхание</span></div></div>
+  <div class="rib"><div><span>Баланс</span><span>Сила без рывков</span><span>Гибкость</span><span>Спокойствие</span><span>Контроль</span><span>Баланс</span><span>Сила без рывков</span><span>Гибкость</span><span>Спокойствие</span><span>Контроль</span></div></div>
+</div>
+
+<section class="hs" id="dirs">
+  <div class="pin"><div class="track" id="track">
+    <div class="intro">
+      <p class="eyebrow">Направления</p>
+      <h2>Четыре способа <em>почувствовать</em> спину</h2>
+      <p>Не знаете, с чего начать? «Мат» и «Здоровая спина» подходят без подготовки.</p>
+      <span class="hint" aria-hidden="true">листайте вниз →</span>
+    </div>
+    <article class="dcard" style="--c:var(--lime);--r:-2deg">
+      <div class="ph"><img src="https://images.unsplash.com/photo-1747239069226-55382c570116?w=800&q=80&auto=format&fit=crop" alt="Упражнение с ремнями на реформере" loading="lazy"></div>
+      <span class="n">01</span><h3>Реформер</h3><p>Пружины дают и поддержку, и сопротивление: глубокие мышцы включаются с первого занятия.</p>
+      <div class="m"><span>55 мин</span><span>до 6 человек</span></div>
+    </article>
+    <article class="dcard" style="--c:var(--lilac);--r:2deg">
+      <div class="ph"><img src="https://images.unsplash.com/photo-1764111585875-1c09efea69ae?w=800&q=80&auto=format&fit=crop" alt="Стойка на лопатках на коврике" loading="lazy"></div>
+      <span class="n">02</span><h3>Мат</h3><p>Классика на коврике с мячом и кольцом. Лучший вход в пилатес для новичков.</p>
+      <div class="m"><span>55 мин</span><span>до 10 человек</span></div>
+    </article>
+    <article class="dcard" style="--c:var(--coral);--r:-1.5deg">
+      <div class="ph"><img src="https://images.unsplash.com/photo-1678985854460-94df3afe13f4?w=800&q=80&auto=format&fit=crop" alt="Мостик на коврике" loading="lazy"></div>
+      <span class="n">03</span><h3>Растяжка</h3><p>Мягкое вытяжение после рабочего дня: снимает зажимы в шее и пояснице.</p>
+      <div class="m"><span>60 мин</span><span>до 10 человек</span></div>
+    </article>
+    <article class="dcard" style="--c:var(--pink);--r:2.5deg">
+      <div class="ph"><img src="https://images.unsplash.com/photo-1771270786606-f5a0e57db762?w=800&q=80&auto=format&fit=crop" alt="Мячи, кольца и эспандеры на деревянной стене студии" loading="lazy"></div>
+      <span class="n">04</span><h3>Здоровая спина</h3><p>Спокойный темп для тех, кто много сидит. Ведёт тренер-реабилитолог.</p>
+      <div class="m"><span>50 мин</span><span>до 6 человек</span></div>
+    </article>
+    <a class="go" href="#schedule">Выбрать<br>время →</a>
+  </div></div>
+</section>
+
+<section class="zoom" id="studio">
+  <div class="pin" id="zoom">
+    <p class="eyebrow cap">Студия</p>
+    <div class="ph"><img src="https://images.unsplash.com/photo-1717500252297-b09508db7ceb?w=1800&q=80&auto=format&fit=crop" alt="Зал студии с реформерами и большим окном" loading="lazy"></div>
+    <div class="txt">
+      <h2>Тихий зал, где слышно <em>дыхание</em></h2>
+      <div class="stats">
+        <div><b data-n="6">6</b><span>реформеров в зале</span></div>
+        <div><b data-n="3">3</b><span>тренера с медобразованием</span></div>
+        <div><b data-n="2">2</b><span>минуты пешком от метро</span></div>
+        <div><b data-n="140">140</b><span>занятий каждый месяц</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sched sec" id="schedule">
+  <div class="wrap">
+    <div class="head rv">
+      <div><p class="eyebrow">Расписание</p><h2>Выберите <em>своё</em> время</h2></div>
+      <p>Запись занимает полминуты. Отменить можно бесплатно за 8 часов до начала.</p>
+    </div>
+    <div class="days rv" id="days" role="group" aria-label="День"></div>
+    <div class="kinds rv" id="kinds" role="group" aria-label="Направление"></div>
+    <div id="slots" aria-live="polite"></div>
+    <p class="note">Это демо-страница: расписание условное, запись сохраняется только в вашем браузере и никуда не отправляется.</p>
+  </div>
+</section>
+
+<section class="sec" id="prices">
+  <div class="wrap">
+    <div class="head rv">
+      <div><p class="eyebrow">Цены</p><h2>Без <em>мелкого</em> шрифта</h2></div>
+      <p>Абонементы действуют на все направления. Заморозка на время отпуска или болезни бесплатная.</p>
+    </div>
+    <div class="plans">
+      <div class="rv"><article class="plan tilt" data-tilt style="--c:var(--lilac)"><h3>Пробное</h3><p class="sum">900 ₽</p><p class="per">одно занятие</p>
+        <ul><li>Любое направление</li><li>Знакомство с тренером</li><li>Разбор осанки</li></ul>
+        <a class="btn" href="#schedule">Выбрать время</a></article></div>
+      <div class="rv" style="--d:.1s"><article class="plan hot tilt" data-tilt><span class="tag">Берут чаще всего</span><h3>8 занятий</h3><p class="sum">9 600 ₽</p><p class="per">1 200 ₽ за занятие</p>
+        <ul><li>Действует 6 недель</li><li>Любые направления</li><li>Заморозка до 14 дней</li></ul>
+        <a class="btn" href="#schedule">Выбрать время</a></article></div>
+      <div class="rv" style="--d:.2s"><article class="plan tilt" data-tilt style="--c:var(--pink)"><h3>Безлимит</h3><p class="sum">14 900 ₽</p><p class="per">в месяц</p>
+        <ul><li>Сколько угодно занятий</li><li>Запись за 14 дней вперёд</li><li>Гостевой визит для друга</li></ul>
+        <a class="btn" href="#schedule">Выбрать время</a></article></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" style="padding-top:0">
+  <div class="wrap faq">
+    <div class="rv"><p class="eyebrow">Вопросы</p><h2>Перед <em>первым</em> визитом</h2></div>
+    <div class="rv">
+      <details open><summary>Я никогда не занималась. Мне подойдёт?</summary><p>Да. На первом занятии тренер спросит о самочувствии и травмах и даст облегчённые варианты упражнений. Начать проще всего с «Мата» или «Здоровой спины».</p></details>
+      <details><summary>Что взять с собой?</summary><p>Удобную одежду и носки, лучше с нескользящей подошвой. Коврики, полотенца и воду даём мы. Носки можно купить на ресепшене.</p></details>
+      <details><summary>Можно ли заниматься при болях в спине?</summary><p>В большинстве случаев можно и полезно, но сначала посоветуйтесь с врачом. Предупредите тренера до занятия — он подберёт безопасную нагрузку.</p></details>
+      <details><summary>Что будет, если я не приду?</summary><p>Отмена за 8 часов и раньше бесплатная. При поздней отмене занятие списывается с абонемента, потому что место уже не успеет занять другой человек.</p></details>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="fin">
+      <div class="rv"><h2>Спина скажет <em>спасибо</em></h2><p>Первое занятие — 900 ₽. Группы небольшие, вечерние часы разбирают быстрее всего.</p><a class="btn lime" href="#schedule">Записаться на пробное</a></div>
+      <dl class="rv" style="--d:.1s">
+        <div><dt>Адрес</dt><dd>Москва, Малая Бронная, 24</dd></div>
+        <div><dt>Часы работы</dt><dd>Ежедневно, 7:30–22:00</dd></div>
+        <div><dt>Телефон</dt><dd><a href="tel:+74950000000">+7 495 000-00-00</a></dd></div>
+      </dl>
+    </div>
+    <div class="giant" aria-hidden="true"><span>О</span><span>С</span><span>Ь</span></div>
+    <div class="legal"><span>© 2026 Студия «Ось». Вымышленная студия, демо-проект для портфолио.</span><span>Фото: <a href="https://unsplash.com/@roxanarxx" rel="noopener">Roxana</a>, <a href="https://unsplash.com/@nasimkeshmiri" rel="noopener">Nasim Keshmiri</a>, <a href="https://unsplash.com/@tinorischawy" rel="noopener">Tino Rischawy</a>, <a href="https://unsplash.com/@___atmos" rel="noopener">Atmos</a>, <a href="https://unsplash.com/@ahmetkurt" rel="noopener">Ahmet Kurt</a> — Unsplash</span></div>
+  </div>
+</footer>
+
+<dialog id="book" aria-labelledby="bk-title">
+  <button class="x" id="bk-x" aria-label="Закрыть">×</button>
+  <form id="bk-form">
+    <p class="eyebrow">Запись на занятие</p>
+    <h3 id="bk-title"></h3>
+    <p class="when" id="bk-when"></p>
+    <label>Имя<input name="name" required minlength="2" maxlength="40" autocomplete="given-name" placeholder="Как к вам обращаться"></label>
+    <label>Телефон<input name="tel" type="tel" required pattern="[\d\s\(\)+\-]{10,18}" autocomplete="tel" inputmode="tel" placeholder="+7 900 000-00-00" title="Номер телефона, от 10 цифр"></label>
+    <button class="btn">Подтвердить запись</button>
+    <p class="fine">Демо: данные никуда не отправляются.</p>
+  </form>
+  <div class="ok" id="bk-ok" hidden>
+    <svg viewBox="0 0 84 84" aria-hidden="true"><path d="M27 43l10 10 20-22"/></svg>
+    <h3 id="bk-hi"></h3>
+    <p class="when" id="bk-sum"></p>
+    <button class="btn plain" id="bk-done">Хорошо</button>
+  </div>
+</dialog>
+
+<script>
+const $ = id => document.getElementById(id);
+const calm = matchMedia('(prefers-reduced-motion:reduce)').matches;
+const clamp = v => Math.max(0, Math.min(1, v));
+
+/* ---------- заголовок: буквы выезжают по одной ---------- */
+let k = 0;
+document.querySelectorAll('h1 .ln').forEach(function split(n) {
+  if (n.nodeType === 3) n.replaceWith(...[...n.data].map(c => Object.assign(document.createElement('span'), { className: 'ch', textContent: c, style: `--k:${k++}` })));
+  else if (!n.classList.contains('pill')) [...n.childNodes].forEach(split);
+});
+
+/* ---------- живой фон: переливающийся градиент на шейдере ---------- */
+const cv = $('gl'), gl = cv.getContext('webgl', { antialias: false });
+if (gl) {
+  const sh = (type, src) => { const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); return s; };
+  const pr = gl.createProgram();
+  gl.attachShader(pr, sh(gl.VERTEX_SHADER, 'attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}'));
+  gl.attachShader(pr, sh(gl.FRAGMENT_SHADER, `precision mediump float;uniform float t;uniform vec2 r,m;
+    void main(){vec2 q=gl_FragCoord.xy/r;q.x*=r.x/r.y;q+=(m-.5)*.25;
+      for(float i=1.;i<4.;i++){q.x+=.38/i*sin(i*2.3*q.y+t*.4+i*1.7);q.y+=.32/i*cos(i*2.1*q.x+t*.3+i);}
+      float a=.5+.5*sin(q.x*2.+t*.2),b=.5+.5*cos(q.y*2.4-t*.15);
+      vec3 c=mix(vec3(.78,.71,1.),vec3(.80,.98,.29),a);
+      c=mix(c,vec3(1.,.42,.24),b*b*.7);
+      c=mix(c,vec3(.96,.945,.90),smoothstep(.15,.95,.5+.5*sin((q.x+q.y)*1.5+t*.1))*.6);
+      gl_FragColor=vec4(c,1.);}`));
+  gl.linkProgram(pr); gl.useProgram(pr);
+  gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+  const loc = gl.getAttribLocation(pr, 'p'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+  const uT = gl.getUniformLocation(pr, 't'), uR = gl.getUniformLocation(pr, 'r'), uM = gl.getUniformLocation(pr, 'm');
+  let seen = true, mx = .5, my = .5, cw = 0;
+  // размытому градиенту хватает половинного разрешения; пересчёт только при смене ширины, иначе на телефоне дёргается
+  const size = () => { if (cv.clientWidth === cw) return; cw = cv.clientWidth; cv.width = cw / 2; cv.height = cv.clientHeight / 2; gl.viewport(0, 0, cv.width, cv.height); };
+  size(); addEventListener('resize', size);
+  new IntersectionObserver(e => seen = e[0].isIntersecting).observe(cv);
+  $('hero').addEventListener('pointermove', e => { if (e.pointerType === 'mouse') { mx = e.clientX / innerWidth; my = 1 - e.clientY / innerHeight; } });
+  (function draw(t) {
+    if (seen) { gl.uniform1f(uT, t / 1000 + 20); gl.uniform2f(uR, cv.width, cv.height); gl.uniform2f(uM, mx, my); gl.drawArrays(gl.TRIANGLES, 0, 3); }
+    if (!calm) requestAnimationFrame(draw);
+  })(0);
+} else cv.remove();
+
+/* ---------- появление, наклон карточек ---------- */
+const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: .12 });
+document.querySelectorAll('.rv').forEach(e => io.observe(e));
+document.querySelectorAll('[data-tilt]').forEach(el => {
+  el.addEventListener('pointermove', e => {
+    if (e.pointerType !== 'mouse') return;
+    const r = el.getBoundingClientRect();
+    el.style.setProperty('--rx', ((e.clientX - r.left) / r.width - .5) * 16);
+    el.style.setProperty('--ry', (.5 - (e.clientY - r.top) / r.height) * 16);
+  });
+  el.addEventListener('pointerleave', () => { el.style.setProperty('--rx', 0); el.style.setProperty('--ry', 0); });
+});
+
+/* ---------- прокрутка: полоса прогресса, карточки вбок, раскрытие фото ---------- */
+const hs = $('dirs'), track = $('track'), zoomSec = $('studio'), zoom = $('zoom');
+let max = 0, lw = 0, counted = false;
+function layout() {
+  if (innerWidth === lw) return; lw = innerWidth;
+  max = Math.max(0, track.scrollWidth - innerWidth);
+  hs.style.height = `calc(100svh + ${max}px)`; // высота секции = сколько нужно проехать вбок
+  onScroll();
+}
+const progress = sec => { const r = sec.getBoundingClientRect(); return clamp(-r.top / (r.height - sec.firstElementChild.offsetHeight)); };
+function onScroll() {
+  $('bar').style.scale = `${scrollY / (document.documentElement.scrollHeight - innerHeight)} 1`;
+  track.style.transform = `translate3d(${-progress(hs) * max}px,0,0)`;
+  const z = clamp(progress(zoomSec) / .75);
+  zoom.style.setProperty('--z', z.toFixed(3));
+  if (z > .9 && !counted) { counted = true; zoom.querySelectorAll('[data-n]').forEach(count); }
+}
+function count(el) {
+  const n = +el.dataset.n, t0 = performance.now();
+  if (calm) return;
+  (function f(t) { const p = Math.min(1, (t - t0) / 1300); el.textContent = Math.round(n * (1 - (1 - p) ** 3)); if (p < 1) requestAnimationFrame(f); })(t0);
+}
+addEventListener('scroll', onScroll, { passive: true });
+addEventListener('resize', layout);
+addEventListener('load', () => { lw = 0; layout(); }); // после загрузки шрифтов ширина ленты меняется
+layout();
+
+/* ---------- расписание ---------- */
+const KINDS = { reformer: 'Реформер', mat: 'Мат', stretch: 'Растяжка', back: 'Здоровая спина' };
+// время, направление, тренер, минут, мест
+const SLOTS = [
+  ['08:00', 'reformer', 'Алина Вершинина', 55, 6], ['10:00', 'mat', 'Вера Лунёва', 55, 10], ['12:30', 'back', 'Марк Седов', 50, 6],
+  ['17:00', 'mat', 'Алина Вершинина', 55, 10], ['18:15', 'reformer', 'Марк Седов', 55, 6], ['19:30', 'stretch', 'Вера Лунёва', 60, 10], ['20:45', 'reformer', 'Алина Вершинина', 55, 6],
+];
+// shortcut: расписание и занятость считаются из даты, сервера нет; для живой студии заменить на запрос к системе записи
+const hash = s => [...s].reduce((h, c) => (h * 31 + c.charCodeAt(0)) >>> 0, 7);
+const freeOf = (id, cap) => cap - hash(id) % (cap + 1);
+console.assert([6, 10].every(cap => ['a', '2026-11-11 08:00', 'zz'].every(id => freeOf(id, cap) >= 0 && freeOf(id, cap) <= cap)), 'freeOf');
+
+const KEY = 'os-bookings';
+let booked = {};
+try { booked = JSON.parse(localStorage.getItem(KEY)) || {}; } catch {}
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(booked)); } catch {} };
+
+const today = new Date();
+const DAYS = Array.from({ length: 7 }, (_, i) => new Date(today.getFullYear(), today.getMonth(), today.getDate() + i));
+const fmt = (d, o) => d.toLocaleDateString('ru', o);
+const state = { day: 0, kind: 'all', slot: null };
+
+$('days').innerHTML = DAYS.map((d, i) => `<button class="day" data-i="${i}">${i ? fmt(d, { weekday: 'short' }) : 'сегодня'}<b>${d.getDate()}</b></button>`).join('');
+$('kinds').innerHTML = [['all', 'Все'], ...Object.entries(KINDS)].map(([k, v]) => `<button class="kind" data-k="${k}">${v}</button>`).join('');
+
+function slotsOf(i) {
+  const d = DAYS[i], key = d.toLocaleDateString('sv'), now = today.toTimeString().slice(0, 5);
+  return SLOTS.filter((_, j) => (d.getDay() + j) % 5 !== 3).map(([time, kind, coach, min, cap]) => {
+    const id = key + ' ' + time, mine = id in booked;
+    return { id, time, kind, coach, min, cap, mine, free: Math.max(0, freeOf(id, cap) - mine), past: !i && time <= now, d };
+  });
+}
+function render() {
+  for (const b of $('days').children) b.setAttribute('aria-pressed', +b.dataset.i === state.day);
+  for (const b of $('kinds').children) b.setAttribute('aria-pressed', b.dataset.k === state.kind);
+  const list = slotsOf(state.day).filter(s => state.kind === 'all' || s.kind === state.kind);
+  $('slots').innerHTML = list.map((s, n) => `
+    <div class="slot${s.mine ? ' mine' : ''}" style="--i:${n}">
+      <time>${s.time}</time>
+      <h3>${KINDS[s.kind]}<small>${s.coach} · ${s.min} мин</small></h3>
+      <div class="left">${s.mine ? 'Вы записаны' : s.free ? `Свободно ${s.free} из ${s.cap}` : 'Мест нет'}<i style="--fill:${100 - s.free / s.cap * 100}%"></i></div>
+      <button class="btn" data-id="${s.id}" ${!s.mine && (s.past || !s.free) ? 'disabled' : ''}>${s.mine ? 'Отменить' : s.past ? 'Уже прошло' : s.free ? 'Записаться' : 'Мест нет'}</button>
+    </div>`).join('') || '<p class="empty">В этот день таких занятий нет — выберите другой день или направление.</p>';
+}
+$('days').addEventListener('click', e => { const b = e.target.closest('.day'); if (b) { state.day = +b.dataset.i; render(); } });
+$('kinds').addEventListener('click', e => { const b = e.target.closest('.kind'); if (b) { state.kind = b.dataset.k; render(); } });
+
+/* ---------- запись ---------- */
+const dlg = $('book'), form = $('bk-form');
+const whenOf = s => `${fmt(s.d, { weekday: 'long', day: 'numeric', month: 'long' })}, ${s.time}`;
+$('slots').addEventListener('click', e => {
+  const b = e.target.closest('button[data-id]'); if (!b) return;
+  const s = slotsOf(state.day).find(x => x.id === b.dataset.id);
+  if (s.mine) { delete booked[s.id]; save(); render(); return; }
+  state.slot = s;
+  $('bk-title').textContent = KINDS[s.kind];
+  $('bk-when').textContent = `${whenOf(s)} · ${s.coach}`;
+  form.hidden = false; $('bk-ok').hidden = true;
+  dlg.showModal();
+});
+form.addEventListener('submit', e => {
+  e.preventDefault();
+  const s = state.slot;
+  booked[s.id] = 1; save(); render(); // имя и телефон не сохраняем: это демо
+  $('bk-hi').textContent = `${form.elements.name.value.trim()}, вы записаны`;
+  $('bk-sum').textContent = `${KINDS[s.kind]} — ${whenOf(s)}. Приходите за 10 минут до начала.`;
+  form.hidden = true; $('bk-ok').hidden = false; $('bk-done').focus();
+});
+$('bk-x').onclick = $('bk-done').onclick = () => dlg.close();
+dlg.addEventListener('click', e => e.target === dlg && dlg.close()); // клик по затемнению
+render();
+</script>
+</body>
+</html>
